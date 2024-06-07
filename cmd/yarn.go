@@ -19,8 +19,9 @@ import (
 func yarnCmd() *cobra.Command {
 	lockFiles := []string{"yarn.lock"}
 	lockGenCommand := []string{"yarn", "install", "--mode", "update-lockfile"}
+	forced := false
 
-	pnpmCmd := &cobra.Command{
+	yarnCmd := &cobra.Command{
 		Use:   "yarn [path]",
 		Short: "Generate lockfile for yarn project",
 		Long: `Create lockfile for yarn project if it doesn't exist in the specified [path].
@@ -31,9 +32,12 @@ If no path is provided, the command defaults to the current directory.`,
 				lockFiles,
 				args,
 				lockGenCommand,
+				forced,
 			)
 		},
 	}
 
-	return pnpmCmd
+	yarnCmd.Flags().BoolVarP(&forced, "force", "f", false, "Generate lockfile forcibly, ignoring existing lockfiles")
+
+	return yarnCmd
 }

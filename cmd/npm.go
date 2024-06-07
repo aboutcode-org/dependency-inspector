@@ -19,8 +19,9 @@ import (
 func npmCmd() *cobra.Command {
 	lockFiles := []string{"package-lock.json", ".package-lock.json", "npm-shrinkwrap.json"}
 	lockGenCommand := []string{"npm", "install", "--package-lock-only"}
+	forced := false
 
-	pnpmCmd := &cobra.Command{
+	npmCmd := &cobra.Command{
 		Use:   "npm [path]",
 		Short: "Generate lockfile for npm project",
 		Long: `Create lockfile for npm project if it doesn't exist in the specified [path].
@@ -31,9 +32,12 @@ If no path is provided, the command defaults to the current directory.`,
 				lockFiles,
 				args,
 				lockGenCommand,
+				forced,
 			)
 		},
 	}
 
-	return pnpmCmd
+	npmCmd.Flags().BoolVarP(&forced, "force", "f", false, "Generate lockfile forcibly, ignoring existing lockfiles")
+
+	return npmCmd
 }

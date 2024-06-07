@@ -19,6 +19,7 @@ import (
 func pnpmCmd() *cobra.Command {
 	lockFiles := []string{"pnpm-lock.yaml", ".pnpm-lock.yaml"}
 	lockGenCommand := []string{"pnpm", "i", "--lockfile-only"}
+	forced := false
 
 	pnpmCmd := &cobra.Command{
 		Use:   "pnpm [path]",
@@ -31,9 +32,12 @@ If no path is provided, the command defaults to the current directory.`,
 				lockFiles,
 				args,
 				lockGenCommand,
+				forced,
 			)
 		},
 	}
+
+	pnpmCmd.Flags().BoolVarP(&forced, "force", "f", false, "Generate lockfile forcibly, ignoring existing lockfiles")
 
 	return pnpmCmd
 }

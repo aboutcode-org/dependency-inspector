@@ -18,7 +18,7 @@ import (
 	"path/filepath"
 )
 
-func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string) {
+func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string, forced bool) {
 
 	path := "."
 	if len(cmdArgs) > 0 {
@@ -31,14 +31,16 @@ func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string) {
 		os.Exit(1)
 	}
 
-	for _, lockFile := range lockFiles {
-		lockFileAbsPath := filepath.Join(absPath, lockFile)
+	if !forced {
+		for _, lockFile := range lockFiles {
+			lockFileAbsPath := filepath.Join(absPath, lockFile)
 
-		if res := DoesFileExists(lockFileAbsPath); res {
-			continue
+			if res := DoesFileExists(lockFileAbsPath); !res {
+				continue
+			}
+			return
+
 		}
-		break
-
 	}
 	genLock(lockGenCmd, absPath)
 
@@ -59,7 +61,7 @@ func DoesFileExists(absPath string) bool {
 			os.Exit(1)
 		}
 
-		fmt.Printf("Lockfile '%s' already present.", relPath)
+		fmt.Printf("Lockfile '%s' already present.\n", relPath)
 		return true
 	}
 	return false
