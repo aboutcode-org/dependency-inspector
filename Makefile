@@ -12,6 +12,7 @@ GOCMD=go
 GOFMT=gofmt
 GOIMPORTS=goimports
 GOLINT=golangci-lint
+GOSEC=gosec
 BINARY_NAME=deplock
 BUILD_DIR=./build
 BINARY_OUTPUT=$(BUILD_DIR)/$(BINARY_NAME)
@@ -31,10 +32,26 @@ test:
 dev:
 	$(GOCMD) install golang.org/x/tools/cmd/goimports@latest
 	$(GOCMD) install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.59.0
+	$(GOCMD) install github.com/securego/gosec/v2/cmd/gosec@latest
 
-valid:
+gofmt:
+	@echo "-> Apply gofmt code formatter"
 	$(GOFMT) -w .
-	$(GOIMPORTS) -w .
-	$(GOLINT) run ./...
 
-.PHONY: build clean test dev valid
+goimports:
+	@echo "-> Apply goimports changes to ensure proper imports ordering"
+	$(GOIMPORTS) -w .
+
+valid: goimports gofmt
+
+check:
+	@echo "-> Running goimports for import ordering validation..."
+	$(GOIMPORTS) -d -e .
+	@echo "\n-> Running gofmt for code formatting validation..."
+	$(GOFMT) -d -e .
+	@echo "\n-> Running golangci-lint for linting..."
+	$(GOLINT) run ./...
+	@echo "\n-> Running gosec for security checks..."
+	$(GOSEC) ./...
+
+.PHONY: build clean test dev gofmt goimports valid check

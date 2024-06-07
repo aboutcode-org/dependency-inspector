@@ -68,6 +68,7 @@ func DoesFileExists(absPath string) bool {
 func genLock(lockGenCmd []string, absPath string) {
 	fmt.Printf("Generating lockfile using '%s'\n", lockGenCmd)
 
+	// #nosec G204
 	command := exec.Command(lockGenCmd[0], lockGenCmd[1:]...)
 	command.Dir = absPath
 	command.Stdout = os.Stdout
