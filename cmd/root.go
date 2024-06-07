@@ -47,7 +47,7 @@ func Execute() {
 	rootCmd := NewRootCmd()
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, "Error:", err)
 		os.Exit(1)
 	}
 }

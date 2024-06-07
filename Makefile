@@ -11,6 +11,7 @@
 GOCMD=go
 GOFMT=gofmt
 GOIMPORTS=goimports
+GOLINT=golangci-lint
 BINARY_NAME=deplock
 BUILD_DIR=./build
 BINARY_OUTPUT=$(BUILD_DIR)/$(BINARY_NAME)
@@ -28,10 +29,12 @@ test:
 
 # Install dev dependency, makes sure  $HOME/go/bin is in PATH
 dev:
-	$(GOCMD) get -u golang.org/x/tools/cmd/goimports
+	$(GOCMD) install golang.org/x/tools/cmd/goimports@latest
+	$(GOCMD) install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.59.0
 
 valid:
 	$(GOFMT) -w .
 	$(GOIMPORTS) -w .
+	$(GOLINT) run ./...
 
 .PHONY: build clean test dev valid
