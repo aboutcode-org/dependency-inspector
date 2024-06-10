@@ -82,7 +82,7 @@ Run these commands, starting from a git clone of https://github.com/nexB/depende
 
     make dev
 
-- Compiles and run:
+- Compile and run:
 
   .. code-block:: bash
 
