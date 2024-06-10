@@ -12,6 +12,8 @@ GOCMD=go
 GOFMT=gofmt
 GOIMPORTS=goimports
 GOLINT=golangci-lint
+GOFMT_CMD = $(GOFMT) -l .
+GOIMPORTS_CMD = $(GOIMPORTS) -l .
 GOSEC=gosec
 BINARY_NAME=deplock
 BUILD_DIR=./build
@@ -45,14 +47,28 @@ goimports:
 
 valid: goimports gofmt
 
-check:
+check-gofmt:
+	@echo "-> Running gofmt for code formatting validation..."
+	@files=$$($(GOFMT_CMD)); \
+	if [ -n "$$files" ]; then \
+		echo "The following files are not properly formatted:"; \
+		echo "$$files"; \
+		exit 1; \
+	fi
+
+check-goimports:
 	@echo "-> Running goimports for import ordering validation..."
-	$(GOIMPORTS) -d -e .
-	@echo "\n-> Running gofmt for code formatting validation..."
-	$(GOFMT) -d -e .
+	@files=$$($(GOIMPORTS_CMD)); \
+	if [ -n "$$files" ]; then \
+		echo "The following files have incorrect imports:"; \
+		echo "$$files"; \
+		exit 1; \
+	fi
+
+check: check-gofmt check-goimports
 	@echo "\n-> Running golangci-lint for linting..."
-	$(GOLINT) run ./...
+	$(GOLINT) run --issues-exit-code=1 ./...
 	@echo "\n-> Running gosec for security checks..."
 	$(GOSEC) ./...
 
-.PHONY: build clean test dev gofmt goimports valid check
+.PHONY: build clean test dev gofmt goimports valid check-gofmt check-goimports check
