@@ -17,11 +17,17 @@ GOIMPORTS_CMD = $(GOIMPORTS) -l .
 GOSEC=gosec
 BINARY_NAME=deplock
 BUILD_DIR=./build
-BINARY_OUTPUT=$(BUILD_DIR)/$(BINARY_NAME)
+GOOS := $(shell $(GOCMD)  env GOOS)
+GOARCH := $(shell $(GOCMD) env GOARCH)
+BINARY_OUTPUT=$(BUILD_DIR)/$(BINARY_NAME)-$(GOOS)-$(GOARCH)
 
 
 build:
+	@echo "Building binary to $(BINARY_OUTPUT)"
 	$(GOCMD) build -o $(BINARY_OUTPUT) -v
+
+build-all:
+	./scripts/build-all.sh
 
 clean:
 	$(GOCMD) clean
@@ -71,4 +77,4 @@ check: check-gofmt check-goimports
 	@echo "\n-> Running gosec for security checks..."
 	$(GOSEC) ./...
 
-.PHONY: build clean test dev gofmt goimports valid check-gofmt check-goimports check
+.PHONY: build build-all clean test dev gofmt goimports valid check-gofmt check-goimports check
