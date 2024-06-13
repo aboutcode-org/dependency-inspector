@@ -17,6 +17,14 @@ platforms=(
     "windows/amd64"
     )
 
+build_flags=
+
+# Omit symbol table, debug info and DWARF symbol table
+# https://github.com/golang/go/blob/ca5ba146da7a9d4e2a8cbe1715a78be42b45a745/src/cmd/link/doc.go#L115-L123
+if [ "$1" == "--strip" ]; then
+    build_flags="-s -w"
+fi
+
 for platform in "${platforms[@]}"
 do
     platform_split=(${platform//\// })
@@ -28,7 +36,7 @@ do
         output_name+='.exe'
     fi    
 
-    env GOOS=$GOOS GOARCH=$GOARCH go build -o ./build/$output_name
+    env GOOS=$GOOS GOARCH=$GOARCH go build -ldflags "$build_flags" -o ./build/$output_name
 
     if [ $? -ne 0 ]; then
         echo "An error occurred during the build process!"

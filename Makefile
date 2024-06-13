@@ -20,14 +20,25 @@ BUILD_DIR=./build
 GOOS := $(shell $(GOCMD)  env GOOS)
 GOARCH := $(shell $(GOCMD) env GOARCH)
 BINARY_OUTPUT=$(BUILD_DIR)/$(BINARY_NAME)-$(GOOS)-$(GOARCH)
+BUILD_FLAGS=
+STRIP_FLAG=
+
+strip ?= no
+
+# Omit symbol table, debug info and DWARF symbol table
+# https://github.com/golang/go/blob/ca5ba146da7a9d4e2a8cbe1715a78be42b45a745/src/cmd/link/doc.go#L115-L123
+ifeq ($(strip), yes)
+	BUILD_FLAGS=-s -w
+	STRIP_FLAG=--strip
+endif
 
 
 build:
 	@echo "Building binary to $(BINARY_OUTPUT)"
-	$(GOCMD) build -o $(BINARY_OUTPUT) -v
+	$(GOCMD) build -ldflags "$(BUILD_FLAGS)" -o $(BINARY_OUTPUT)
 
 build-all:
-	./scripts/build-all.sh
+	./scripts/build-all.sh $(STRIP_FLAG)
 
 clean:
 	$(GOCMD) clean
