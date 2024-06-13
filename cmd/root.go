@@ -26,8 +26,8 @@ var ecosystems = []func() *cobra.Command{
 
 func NewRootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
-		Use:   "deplock",
-		Short: "DepLock: Dependency Locker CLI",
+		Use:     "deplock",
+		Short:   "DepLock: Dependency Locker CLI",
 		Version: "1.0.0",
 	}
 
