@@ -8,6 +8,7 @@ DepLock
 
 .. |license| image:: https://img.shields.io/badge/License-Apache--2.0-blue.svg?style=for-the-badge
     :target: https://opensource.org/licenses/Apache-2.0
+
 .. |version| image:: https://img.shields.io/github/v/release/nexB/dependency-inspector?style=for-the-badge
 
 .. |build| image:: https://img.shields.io/github/actions/workflow/status/nexB/dependency-inspector/ci.yml?style=for-the-badge&logo=github
@@ -20,14 +21,16 @@ To install DepLock, follow these steps:
 
 .. code-block:: bash
 
-    # Download the latest binary
-    curl -LO https://github.com/nexB/dependency-inspector/releases/latest/download/deplock
+    # Download the latest binary depending on your OS and architecture
+    # Replace <OS> with your operating system (linux, darwin, windows)
+    # Replace <ARCH> with your architecture (amd64, arm64)
+    curl -LO https://github.com/nexB/dependency-inspector/releases/latest/download/deplock-<OS>-<ARCH>
 
     # Make the binary executable
-    chmod +x deplock
+    chmod +x deplock-<OS>-<ARCH>
 
-    # [Optional] Move the binary to included in your PATH
-    mv deplock /usr/local/bin/
+    # [Optional] Rename and move the binary to your PATH
+    mv deplock-<OS>-<ARCH> /usr/local/bin/deplock
 
 Uses
 =====
@@ -45,9 +48,9 @@ Here's how to get started and use the various commands:
 Supported Ecosystems
 --------------------
 
-- npm
-- pnpm
-- yarn
+- **npm**
+- **pnpm**
+- **yarn**
 
 Example
 -------
