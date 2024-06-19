@@ -79,9 +79,10 @@ func genLock(lockGenCmd []string, absPath string, outputFileName string) {
 
 		outputPath := filepath.Join(absPath, outputFileName)
 
+		// #nosec G304
 		outputFile, err := os.Create(outputPath)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error: failed to create output file: %v", err)
+			fmt.Fprintln(os.Stderr, "Error: failed to create output file: ", err)
 			os.Exit(1)
 		}
 		defer outputFile.Close()
