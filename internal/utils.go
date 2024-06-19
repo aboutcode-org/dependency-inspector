@@ -18,7 +18,7 @@ import (
 	"path/filepath"
 )
 
-func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string, forced bool) {
+func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string, outputFileName string, forced bool) {
 
 	path := "."
 	if len(cmdArgs) > 0 {
@@ -42,7 +42,7 @@ func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string, f
 
 		}
 	}
-	genLock(lockGenCmd, absPath)
+	genLock(lockGenCmd, absPath, outputFileName)
 
 }
 
@@ -67,14 +67,28 @@ func DoesFileExists(absPath string) bool {
 	return false
 }
 
-func genLock(lockGenCmd []string, absPath string) {
+func genLock(lockGenCmd []string, absPath string, outputFileName string) {
 	fmt.Printf("Generating lockfile using '%s'\n", lockGenCmd)
 
 	// #nosec G204
 	command := exec.Command(lockGenCmd[0], lockGenCmd[1:]...)
 	command.Dir = absPath
-	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
+	command.Stdout = os.Stdout
+	if outputFileName != "" {
+
+		outputPath := filepath.Join(absPath, outputFileName)
+
+		// #nosec G304
+		outputFile, err := os.Create(outputPath)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Error: failed to create output file: ", err)
+			os.Exit(1)
+		}
+		defer outputFile.Close()
+
+		command.Stdout = outputFile
+	}
 
 	if err := command.Run(); err != nil {
 		fmt.Fprintln(os.Stderr, "Error: Failed to generate lockfile: ", err)

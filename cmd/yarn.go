@@ -32,6 +32,7 @@ If no path is provided, the command defaults to the current directory.`,
 				lockFiles,
 				args,
 				lockGenCommand,
+				"",
 				forced,
 			)
 		},
