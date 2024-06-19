@@ -2,8 +2,6 @@
 DepLock
 ===================
 
-**DepLock** (Dependency Locker) is a CLI tool to generate lockfiles, which contain resolved dependencies for the project.
-
 |license| |version| |build| 
 
 .. |license| image:: https://img.shields.io/badge/License-Apache--2.0-blue.svg?style=for-the-badge
@@ -12,6 +10,27 @@ DepLock
 .. |version| image:: https://img.shields.io/github/v/release/nexB/dependency-inspector?style=for-the-badge
 
 .. |build| image:: https://img.shields.io/github/actions/workflow/status/nexB/dependency-inspector/ci.yml?style=for-the-badge&logo=github
+
+**DepLock** (Dependency Locker) is a command line tool to generate package lockfiles, 
+and parsable package manifests to make it possible and easy to collect resolved dependencies
+and accurate metadata for a project. It uses the standard package management tool for
+each package type or ecosystem.
+
+This tool is designed for use before a scan and is deployed as a single,
+standalone executable file. It should be running in a shell or command prompt
+configured to run the project build, with all required package management tools
+pre-installed and configured.
+
+The main usage is to run as a front command before a ScanCode.io or ScanCode Toolkit scan
+but it is generic and can be used with any other tool. 
+
+Supported Ecosystems
+=====================
+
+- **npm**: https://www.npmjs.com/
+- **pnpm**: https://pnpm.io/
+- **yarn**: https://yarnpkg.com/
+- **swift**: https://www.swift.org/documentation/package-manager/
 
 
 Installation
@@ -32,10 +51,22 @@ To install DepLock, follow these steps:
     # [Optional] Rename and move the binary to your PATH
     mv deplock-<OS>-<ARCH> /usr/local/bin/deplock
 
-Uses
-=====
+Alternatively you can build it from source as exaplained below.
 
-Here's how to get started and use the various commands:
+
+Requirements
+============
+
+To use DepLock, you need to ensure that you have installed and configured
+the package manager(s) your project needs.
+
+For instance, `npm` must be installed to generate `npm` lockfiles.
+
+
+Usage
+=======
+
+Here is how to get started and use the various commands:
 
 .. code-block:: bash
 
@@ -44,13 +75,6 @@ Here's how to get started and use the various commands:
 
     # Display help for a specific command
     deplock [command] --help
-
-Supported Ecosystems
---------------------
-
-- **npm**
-- **pnpm**
-- **yarn**
 
 Example
 -------
@@ -72,9 +96,12 @@ Generating lockfile for an npm project:
 Contribution
 =============
 
-We welcome contributions from the community! If you find a bug or have an idea for a new feature, please open an issue on the GitHub repository. If you want to contribute code, you can fork the repository, make your changes, and submit a pull request.
+We welcome contributions from the community! If you find a bug or have an idea for a new feature, 
+please open an issue on the GitHub repository. If you want to contribute code, you can fork the
+repository, make your changes, and submit a pull request.
 
-- Please try to write a good commit message, see `good commit message wiki. <https://aboutcode.readthedocs.io/en/latest/contributing/writing_good_commit_messages.html>`_
+- Please try to write a good commit message, see `good commit message wiki.
+  <https://aboutcode.readthedocs.io/en/latest/contributing/writing_good_commit_messages.html>`_
 - Add DCO Sign Off to your commits.
 
 Development setup
