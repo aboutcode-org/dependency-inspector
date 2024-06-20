@@ -31,6 +31,7 @@ Supported Ecosystems
 - **pnpm**: https://pnpm.io/
 - **yarn**: https://yarnpkg.com/
 - **swift**: https://www.swift.org/documentation/package-manager/
+- **cocoapods**: https://cocoapods.org/
 
 
 Installation

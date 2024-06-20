@@ -23,6 +23,7 @@ var ecosystems = []func() *cobra.Command{
 	npmCmd,
 	yarnCmd,
 	swiftCmd,
+	cocoapodsCmd,
 }
 
 func NewRootCmd() *cobra.Command {

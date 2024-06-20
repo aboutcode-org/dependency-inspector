@@ -27,8 +27,8 @@ func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string, o
 
 	absPath, err := filepath.Abs(path)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: Failed to retrieve absolute path: %v\n", err)
-		os.Exit(1)
+		fmt.Fprintln(os.Stderr, "Error: Failed to retrieve absolute path: ", err)
+		return
 	}
 
 	if !forced {
@@ -39,7 +39,6 @@ func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string, o
 				continue
 			}
 			return
-
 		}
 	}
 	genLock(lockGenCmd, absPath, outputFileName)
