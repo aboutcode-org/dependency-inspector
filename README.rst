@@ -32,6 +32,7 @@ Supported Ecosystems
 - **yarn**: https://yarnpkg.com/
 - **swift**: https://www.swift.org/documentation/package-manager/
 - **cocoapods**: https://cocoapods.org/
+- **pypi**: https://pypi.org/
 
 
 Installation
