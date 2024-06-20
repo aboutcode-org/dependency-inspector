@@ -16,15 +16,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func yarnCmd() *cobra.Command {
-	lockFiles := []string{"yarn.lock"}
-	lockGenCommand := []string{"yarn", "install"}
+func pypiCmd() *cobra.Command {
+	pipFreezeFile := "requirements.deplock"
+	lockFiles := []string{"Pipfile.lock", pipFreezeFile}
+	lockGenCommand := []string{"pip", "freeze"}
 	forced := false
 
-	yarnCmd := &cobra.Command{
-		Use:   "yarn [path]",
-		Short: "Generate lockfile for yarn project",
-		Long: `Create lockfile for yarn project if it doesn't exist in the specified [path].
+	pypiCmd := &cobra.Command{
+		Use:   "pypi [path]",
+		Short: "Generate lockfile for Python project",
+		Long: `Create lockfile for Python project if it doesn't exist in the specified [path].
 If no path is provided, the command defaults to the current directory.`,
 		Args: cobra.MaximumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
@@ -32,13 +33,13 @@ If no path is provided, the command defaults to the current directory.`,
 				lockFiles,
 				args,
 				lockGenCommand,
-				"",
+				pipFreezeFile,
 				forced,
 			)
 		},
 	}
 
-	yarnCmd.Flags().BoolVarP(&forced, "force", "f", false, "Generate lockfile forcibly, ignoring existing lockfiles")
+	pypiCmd.Flags().BoolVarP(&forced, "force", "f", false, "Generate lockfile forcibly, ignoring existing lockfiles")
 
-	return yarnCmd
+	return pypiCmd
 }
