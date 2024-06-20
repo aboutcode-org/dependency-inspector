@@ -17,18 +17,13 @@ import (
 )
 
 func swiftCmd() *cobra.Command {
-	lockFiles := [][]string{
-		{"Package.resolved", ".package.resolved"},
-		{"Package.swift.json"},
-	}
-	lockGenCommands := [][]string{
-		{"swift", "package", "resolve"},
-		{"swift", "package", "dump-package"},
-	}
-	commandOutput := []string{
-		"",
-		"Package.swift.json",
-	}
+	deplockSwiftManifestDumpFile := "Package.swift.deplock"
+	resolvedLockFiles := []string{"Package.resolved", ".package.resolved"}
+	deplockManifestDumpFiles := []string{deplockSwiftManifestDumpFile}
+
+	resolvedLockGenCommand := []string{"swift", "package", "resolve"}
+	deplockManifestDumpGenCommand := []string{"swift", "package", "dump-package"}
+
 	forced := false
 
 	swiftCmd := &cobra.Command{
@@ -41,15 +36,21 @@ If no path is provided, the command defaults to the current directory.`,
 
 		Run: func(cmd *cobra.Command, args []string) {
 
-			for i := range lockFiles {
-				internal.CreateLockFile(
-					lockFiles[i],
-					args,
-					lockGenCommands[i],
-					commandOutput[i],
-					forced,
-				)
-			}
+			internal.CreateLockFile(
+				resolvedLockFiles,
+				args,
+				resolvedLockGenCommand,
+				"",
+				forced,
+			)
+
+			internal.CreateLockFile(
+				deplockManifestDumpFiles,
+				args,
+				deplockManifestDumpGenCommand,
+				deplockSwiftManifestDumpFile,
+				forced,
+			)
 
 		},
 	}
