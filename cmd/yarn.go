@@ -18,7 +18,7 @@ import (
 
 func yarnCmd() *cobra.Command {
 	lockFiles := []string{"yarn.lock"}
-	lockGenCommand := []string{"yarn", "install", "--mode", "update-lockfile"}
+	lockGenCommand := []string{"yarn", "install"}
 	forced := false
 
 	yarnCmd := &cobra.Command{
