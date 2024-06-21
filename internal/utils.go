@@ -16,22 +16,18 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+
+	"github.com/bmatcuk/doublestar/v4"
 )
 
 func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string, outputFileName string, forced bool) {
-
-	path := "."
-	if len(cmdArgs) > 0 {
-		path = cmdArgs[0]
-	}
-
-	absPath, err := filepath.Abs(path)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error: Failed to retrieve absolute path: ", err)
+	absPath := getAbsPath(cmdArgs)
+	if absPath == "" {
 		return
 	}
 
 	if !forced {
+		// If any lockfile is present already then skip lockfile generation.
 		for _, lockFile := range lockFiles {
 			lockFileAbsPath := filepath.Join(absPath, lockFile)
 
@@ -66,8 +62,23 @@ func DoesFileExists(absPath string) bool {
 	return false
 }
 
+func getAbsPath(cmdArgs []string) string {
+	path := "."
+	if len(cmdArgs) > 0 {
+		path = cmdArgs[0]
+	}
+
+	absPath, err := filepath.Abs(path)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error: Failed to retrieve absolute path: ", err)
+		return ""
+	}
+
+	return absPath
+}
+
 func genLock(lockGenCmd []string, absPath string, outputFileName string) {
-	fmt.Printf("Generating lockfile using '%s'\n", lockGenCmd)
+	fmt.Printf("Generating lockfile at '%s' using '%s'\n", absPath, lockGenCmd)
 
 	// #nosec G204
 	command := exec.Command(lockGenCmd[0], lockGenCmd[1:]...)
@@ -95,4 +106,36 @@ func genLock(lockGenCmd []string, absPath string, outputFileName string) {
 	}
 
 	fmt.Println("Lock file generated successfully.")
+}
+
+func CreateLockFileNuGet(cmdArgs []string, force bool) {
+	nuGetLockFileName := "packages.lock.json"
+	nuGetLockFileGenCmd := []string{"dotnet", "restore", "--use-lock-file"}
+
+	project_path := getAbsPath(cmdArgs)
+	if project_path == "" {
+		return
+	}
+
+	fs := os.DirFS(project_path)
+	csproj_pattern := "**/*.csproj"
+
+	csproj_files, _ := doublestar.Glob(fs, csproj_pattern)
+	if len(csproj_files) == 0 {
+		fmt.Fprintln(os.Stderr, "Error: Path does not contain a NuGet project")
+		return
+	}
+
+	// Generate lockfile for all NuGet projects
+	for _, file := range csproj_files {
+		fullPath := filepath.Join(project_path, file)
+		dir := filepath.Dir(fullPath)
+
+		lockFile := filepath.Join(dir, nuGetLockFileName)
+		if force || !DoesFileExists(lockFile) {
+			genLock(nuGetLockFileGenCmd, dir, "")
+		}
+
+	}
+
 }
