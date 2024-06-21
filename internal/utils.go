@@ -16,6 +16,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+
+	"github.com/bmatcuk/doublestar/v4"
 )
 
 func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string, outputFileName string, forced bool) {
@@ -25,6 +27,7 @@ func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string, o
 	}
 
 	if !forced {
+		// If any lockfile is present already then skip lockfile generation.
 		for _, lockFile := range lockFiles {
 			lockFileAbsPath := filepath.Join(absPath, lockFile)
 
@@ -114,20 +117,22 @@ func CreateLockFileNuGet(cmdArgs []string, force bool) {
 		return
 	}
 
-	csproj_pattern := filepath.Join(project_path, "*", "*.csproj")
-	fmt.Println(csproj_pattern)
+	fs := os.DirFS(project_path)
+	csproj_pattern := "**/*.csproj"
 
-	csproj_files, err := filepath.Glob(csproj_pattern)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error: Path does not contain a NuGet project: ", err)
+	csproj_files, _ := doublestar.Glob(fs, csproj_pattern)
+	if len(csproj_files) == 0 {
+		fmt.Fprintln(os.Stderr, "Error: Path does not contain a NuGet project")
 		return
 	}
 
 	// Generate lockfile for all NuGet projects
 	for _, file := range csproj_files {
-		dir := filepath.Dir(file)
+		fullPath := filepath.Join(project_path, file)
+		dir := filepath.Dir(fullPath)
+
 		lockFile := filepath.Join(dir, nuGetLockFileName)
-		if !DoesFileExists(lockFile) || force {
+		if force || !DoesFileExists(lockFile) {
 			genLock(nuGetLockFileGenCmd, dir, "")
 		}
 
