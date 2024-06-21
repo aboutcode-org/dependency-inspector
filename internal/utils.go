@@ -19,15 +19,8 @@ import (
 )
 
 func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string, outputFileName string, forced bool) {
-
-	path := "."
-	if len(cmdArgs) > 0 {
-		path = cmdArgs[0]
-	}
-
-	absPath, err := filepath.Abs(path)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error: Failed to retrieve absolute path: ", err)
+	absPath := getAbsPath(cmdArgs)
+	if absPath == "" {
 		return
 	}
 
@@ -66,8 +59,23 @@ func DoesFileExists(absPath string) bool {
 	return false
 }
 
+func getAbsPath(cmdArgs []string) string {
+	path := "."
+	if len(cmdArgs) > 0 {
+		path = cmdArgs[0]
+	}
+
+	absPath, err := filepath.Abs(path)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error: Failed to retrieve absolute path: ", err)
+		return ""
+	}
+
+	return absPath
+}
+
 func genLock(lockGenCmd []string, absPath string, outputFileName string) {
-	fmt.Printf("Generating lockfile using '%s'\n", lockGenCmd)
+	fmt.Printf("Generating lockfile at '%s' using '%s'\n", absPath, lockGenCmd)
 
 	// #nosec G204
 	command := exec.Command(lockGenCmd[0], lockGenCmd[1:]...)
@@ -95,4 +103,34 @@ func genLock(lockGenCmd []string, absPath string, outputFileName string) {
 	}
 
 	fmt.Println("Lock file generated successfully.")
+}
+
+func CreateLockFileNuGet(cmdArgs []string, force bool) {
+	nuGetLockFileName := "packages.lock.json"
+	nuGetLockFileGenCmd := []string{"dotnet", "restore", "--use-lock-file"}
+
+	project_path := getAbsPath(cmdArgs)
+	if project_path == "" {
+		return
+	}
+
+	csproj_pattern := filepath.Join(project_path, "*", "*.csproj")
+	fmt.Println(csproj_pattern)
+
+	csproj_files, err := filepath.Glob(csproj_pattern)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error: Path does not contain a NuGet project: ", err)
+		return
+	}
+
+	// Generate lockfile for all NuGet projects
+	for _, file := range csproj_files {
+		dir := filepath.Dir(file)
+		lockFile := filepath.Join(dir, nuGetLockFileName)
+		if !DoesFileExists(lockFile) || force {
+			genLock(nuGetLockFileGenCmd, dir, "")
+		}
+
+	}
+
 }

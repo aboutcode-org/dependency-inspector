@@ -25,9 +25,10 @@ var ecosystems = []func() *cobra.Command{
 	swiftCmd,
 	cocoapodsCmd,
 	pypiCmd,
+	nugetCmd,
 }
 
-func NewRootCmd() *cobra.Command {
+func rootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:     "deplock",
 		Short:   "DepLock: Dependency Locker CLI",
@@ -48,7 +49,7 @@ func initConfig(rootCmd *cobra.Command) {
 }
 
 func Execute() {
-	rootCmd := NewRootCmd()
+	rootCmd := rootCmd()
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, "Error:", err)
