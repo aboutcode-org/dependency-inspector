@@ -18,11 +18,15 @@ import (
 
 func swiftCmd() *cobra.Command {
 	deplockSwiftManifestDumpFile := "Package.swift.deplock"
+	deplockSwiftShowDependenciesFile := "swift-show-dependencies.deplock"
+
 	resolvedLockFiles := []string{"Package.resolved", ".package.resolved"}
 	deplockManifestDumpFiles := []string{deplockSwiftManifestDumpFile}
+	deplockSwiftShowDependenciesFiles := []string{deplockSwiftShowDependenciesFile}
 
 	resolvedLockGenCommand := []string{"swift", "package", "resolve"}
 	deplockManifestDumpGenCommand := []string{"swift", "package", "dump-package"}
+	deplockShowDependenciesGenCommand := []string{"swift", "package", "show-dependencies", "--format", "json"}
 
 	forced := false
 
@@ -49,6 +53,14 @@ If no path is provided, the command defaults to the current directory.`,
 				args,
 				deplockManifestDumpGenCommand,
 				deplockSwiftManifestDumpFile,
+				forced,
+			)
+
+			internal.CreateLockFile(
+				deplockSwiftShowDependenciesFiles,
+				args,
+				deplockShowDependenciesGenCommand,
+				deplockSwiftShowDependenciesFile,
 				forced,
 			)
 
