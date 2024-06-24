@@ -17,9 +17,9 @@ import (
 )
 
 func pypiCmd() *cobra.Command {
-	pipFreezeFile := "requirements.deplock"
-	lockFiles := []string{"Pipfile.lock", pipFreezeFile}
-	lockGenCommand := []string{"pip", "freeze"}
+	pipInspectFile := "pip-inspect.deplock"
+	lockFiles := []string{pipInspectFile}
+	lockGenCommand := []string{"pip", "inspect"}
 	forced := false
 
 	pypiCmd := &cobra.Command{
@@ -33,7 +33,7 @@ If no path is provided, the command defaults to the current directory.`,
 				lockFiles,
 				args,
 				lockGenCommand,
-				pipFreezeFile,
+				pipInspectFile,
 				forced,
 			)
 		},
