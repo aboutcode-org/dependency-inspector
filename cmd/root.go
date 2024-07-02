@@ -32,7 +32,7 @@ func rootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:     "deplock",
 		Short:   "DepLock: Dependency Locker CLI",
-		Version: "1.0.0",
+		Version: "2.0.0",
 	}
 
 	initConfig(rootCmd)
