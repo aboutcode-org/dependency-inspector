@@ -20,6 +20,10 @@ import (
 	"github.com/bmatcuk/doublestar/v4"
 )
 
+// CreateLockFile generates lockfile using lockGenCmd command.
+//
+// If forced is false and any of the specified lockFiles already exist, skip lockfile generation.
+// Otherwise, generate the lockfile using lockGenCmd.
 func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string, outputFileName string, forced bool) {
 	absPath := getAbsPath(cmdArgs)
 	if absPath == "" {
@@ -41,6 +45,10 @@ func CreateLockFile(lockFiles []string, cmdArgs []string, lockGenCmd []string, o
 
 }
 
+// DoesFileExists checks if the file exists at the given absolute path.
+//
+// If the file exists, print its relative path and return true.
+// If the file does not exist, return false.
 func DoesFileExists(absPath string) bool {
 	if _, err := os.Stat(absPath); err == nil {
 
@@ -62,6 +70,12 @@ func DoesFileExists(absPath string) bool {
 	return false
 }
 
+// getAbsPath returns the absolute path of a given directory.
+//
+// If cmdArgs is empty, return the absolute path of the current directory.
+// Otherwise, return the absolute path of first arg in cmdArgs.
+// If there is an error while retrieving the absolute path, print an error
+// message to the standard error and return an empty string.
 func getAbsPath(cmdArgs []string) string {
 	path := "."
 	if len(cmdArgs) > 0 {
@@ -77,6 +91,11 @@ func getAbsPath(cmdArgs []string) string {
 	return absPath
 }
 
+// genLock generates a lockfile at absPath using the lockGenCmd command.
+//
+// Execute lockGenCmd command in the absPath directory.
+// If outputFileName is specified, create an output file in absPath and redirect the command's
+// output to that file. Print an error message and exit with status 1 if creating the output file fails.
 func genLock(lockGenCmd []string, absPath string, outputFileName string) {
 	fmt.Printf("Generating lockfile at '%s' using '%s'\n", absPath, lockGenCmd)
 
@@ -108,6 +127,13 @@ func genLock(lockGenCmd []string, absPath string, outputFileName string) {
 	fmt.Println("Lock file generated successfully.")
 }
 
+// CreateLockFileNuGet generates NuGet lockfile for all NuGet projects found in the directory.
+//
+// Search for all .csproj files recursively in the project_path.
+// If no .csproj files are found, print an error message to standard error and return.
+//
+// For each .csproj file found, generate corresponding lockfile if force is true or the lockfile
+// does not already exist.
 func CreateLockFileNuGet(cmdArgs []string, force bool) {
 	nuGetLockFileName := "packages.lock.json"
 	nuGetLockFileGenCmd := []string{"dotnet", "restore", "--use-lock-file"}

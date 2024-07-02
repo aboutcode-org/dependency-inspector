@@ -22,7 +22,10 @@ configured to run the project build, with all required package management tools
 pre-installed and configured.
 
 The main usage is to run as a front command before a ScanCode.io or ScanCode Toolkit scan
-but it is generic and can be used with any other tool. 
+but it is generic and can be used with any other tool.
+
+See this tutorial on how to Analyze Codebase End-to-End with DepLock, ScanCode.io and DejaCode
+https://scancodeio.readthedocs.io/en/latest/tutorial_cli_end_to_end_scanning_to_dejacode.html.
 
 Supported Ecosystems
 =====================
