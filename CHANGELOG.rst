@@ -4,7 +4,13 @@ Changelog
 Next Release
 ----------------
 
-- 
+-
+
+
+v2.0.1 (2024-08-19)
+-------------------
+
+- Update link references of ownership from nexB to aboutcode-org
 
 
 v2.0.0 (2024-07-02)
