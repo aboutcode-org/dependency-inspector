@@ -1,4 +1,4 @@
-module github.com/nexB/dependency-inspector
+module github.com/aboutcode-org/dependency-inspector
 
 go 1.22.3
 

@@ -2,7 +2,7 @@
 DepLock
 ===================
 
-|license| |version| |build| 
+|license| |version| |build|
 
 .. |license| image:: https://img.shields.io/badge/License-Apache--2.0-blue.svg?style=for-the-badge
     :target: https://opensource.org/licenses/Apache-2.0
@@ -11,7 +11,7 @@ DepLock
 
 .. |build| image:: https://img.shields.io/github/actions/workflow/status/nexB/dependency-inspector/ci.yml?style=for-the-badge&logo=github
 
-**DepLock** (Dependency Locker) is a command line tool to generate package lockfiles, 
+**DepLock** (Dependency Locker) is a command line tool to generate package lockfiles,
 and parsable package manifests to make it possible and easy to collect resolved dependencies
 and accurate metadata for a project. It uses the standard package management tool for
 each package type or ecosystem.
@@ -49,7 +49,7 @@ To install DepLock, follow these steps:
     # Download the latest binary depending on your OS and architecture
     # Replace <OS> with your operating system (linux, darwin, windows)
     # Replace <ARCH> with your architecture (amd64, arm64)
-    curl -LO https://github.com/nexB/dependency-inspector/releases/latest/download/deplock-<OS>-<ARCH>
+    curl -LO https://github.com/aboutcode-org/dependency-inspector/releases/latest/download/deplock-<OS>-<ARCH>
 
     # Make the binary executable
     chmod +x deplock-<OS>-<ARCH>
@@ -102,7 +102,7 @@ Generating lockfile for an npm project:
 Contribution
 =============
 
-We welcome contributions from the community! If you find a bug or have an idea for a new feature, 
+We welcome contributions from the community! If you find a bug or have an idea for a new feature,
 please open an issue on the GitHub repository. If you want to contribute code, you can fork the
 repository, make your changes, and submit a pull request.
 
@@ -112,7 +112,7 @@ repository, make your changes, and submit a pull request.
 
 Development setup
 ------------------
-Run these commands, starting from a git clone of https://github.com/nexB/dependency-inspector.git
+Run these commands, starting from a git clone of https://github.com/aboutcode-org/dependency-inspector.git
 
 .. code-block:: bash
 

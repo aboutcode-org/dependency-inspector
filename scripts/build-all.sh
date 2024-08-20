@@ -4,16 +4,16 @@
 # ScanCode is a trademark of nexB Inc.
 # SPDX-License-Identifier: Apache-2.0
 # See http://www.apache.org/licenses/LICENSE-2.0 for the license text.
-# See https://github.com/nexB/dependency-inspector for support or download.
+# See https://github.com/aboutcode-org/dependency-inspector for support or download.
 # See https://aboutcode.org for more information about nexB OSS projects.
 #
-    
+
 platforms=(
-    "linux/arm64" 
-    "linux/amd64" 
-    "darwin/arm64" 
-    "darwin/amd64" 
-    "windows/arm64" 
+    "linux/arm64"
+    "linux/amd64"
+    "darwin/arm64"
+    "darwin/amd64"
+    "windows/arm64"
     "windows/amd64"
     )
 
@@ -31,10 +31,10 @@ do
     GOOS=${platform_split[0]}
     GOARCH=${platform_split[1]}
     output_name='deplock-'$GOOS'-'$GOARCH
-    
+
     if [ $GOOS = "windows" ]; then
         output_name+='.exe'
-    fi    
+    fi
 
     env GOOS=$GOOS GOARCH=$GOARCH go build -ldflags "$build_flags" -o ./build/$output_name
 
