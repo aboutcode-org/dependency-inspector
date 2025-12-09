@@ -20,6 +20,7 @@ import (
 
 var ecosystems = []func() *cobra.Command{
 	pnpmCmd,
+	mvnCmd,
 	npmCmd,
 	yarnCmd,
 	swiftCmd,

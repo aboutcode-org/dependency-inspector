@@ -37,6 +37,7 @@ Supported Ecosystems
 - **cocoapods**: https://cocoapods.org/
 - **pypi**: https://pypi.org/
 - **nuget**: https://www.nuget.org/
+- **mvn**: https://maven.apache.org/ (using https://github.com/chains-project/maven-lockfile/)
 
 
 Installation
