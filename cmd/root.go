@@ -26,6 +26,7 @@ var ecosystems = []func() *cobra.Command{
 	cocoapodsCmd,
 	pypiCmd,
 	nugetCmd,
+	goCmd,
 }
 
 func rootCmd() *cobra.Command {
